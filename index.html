@@ -3,33 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#21140e">
-  <meta name="description" content="Cardápio demonstrativo do Chef Rafael Martins, com sugestões de pratos e pacotes para eventos.">
-  <title>Chef Rafael Martins · Cardápio para eventos</title>
+  <meta name="theme-color" content="#171513">
+  <meta name="description" content="Buffet do Chefe Valdo para eventos em Fortaleza. Conheça os cinco cardápios e peça seu orçamento pelo WhatsApp.">
+  <title>Chefe Valdo · Buffet para eventos em Fortaleza</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
   <style>
     :root {
-      --ink: #281b14;
-      --espresso: #21140e;
-      --cream: #fffaf3;
-      --paper: #f4ebe0;
-      --muted: #6d584d;
-      --copper: #8c4429;
-      --light-copper: #f3c49e;
-      --line: #e7d8c8;
+      --ink: #25211d;
+      --espresso: #171513;
+      --cream: #fffdf8;
+      --paper: #f5efe6;
+      --muted: #62584c;
+      --copper: #755323;
+      --light-copper: #e3bd79;
+      --line: #e6dac8;
       --serif: "Instrument Serif", Georgia, serif;
       --sans: "DM Sans", system-ui, sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; }
     [hidden] { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    #juice-choices ul { display: flex; flex-wrap: wrap; gap: 4px 24px; }
     body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.5 var(--sans); }
     h1, h2, h3, p { margin: 0; }
     h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1; }
     button, input, textarea { font: inherit; color: inherit; }
     button { cursor: pointer; }
-    :focus-visible { outline: 2px solid #b46a47; outline-offset: 3px; }
+    :focus-visible { outline: 2px solid #926525; outline-offset: 3px; }
     img { display: block; width: 100%; object-fit: cover; }
     .stage { width: min(100%, 1120px); margin: 30px auto 0; }
     .hero {
@@ -45,11 +47,11 @@
       color: var(--cream);
     }
     .hero img, .hero::after { position: absolute; inset: 0; height: 100%; }
-    .hero img { z-index: -2; object-position: 69% 63%; }
+    .hero img { z-index: -2; inset: 0 0 0 auto; width: min(52%, 480px); object-position: 50% 19%; }
     .hero::after {
       z-index: -1;
       content: "";
-      background: linear-gradient(90deg, #160b08f2 1%, #200f09cb 31%, #21120946 66%, #21120922);
+      background: linear-gradient(90deg, #171513 47%, #17151344 66%, transparent 83%);
     }
     .monogram {
       display: grid;
@@ -57,14 +59,14 @@
       height: 52px;
       margin-bottom: 20px;
       place-items: center;
-      border: 1px solid #efbc9590;
+      border: 1px solid #e3bd79a0;
       border-radius: 50%;
       color: var(--light-copper);
-      background: #291810a3;
+      background: #171513ac;
       font: italic 1.55rem/1 var(--serif);
     }
     .hero h1 { font-size: clamp(3rem, 6.5vw, 5.85rem); letter-spacing: -.035em; text-wrap: balance; }
-    .hero p { margin-top: 10px; color: #f4dcc6; font-size: 1rem; }
+    .hero p { margin-top: 10px; color: #f4e2c8; font-size: 1rem; }
     .catalog {
       position: relative;
       width: min(calc(100% - 56px), 920px);
@@ -109,76 +111,58 @@
       opacity: 0;
     }
     @supports selector(:has(*)) {
-      .catalog:not(:has(#contato:target, #avaliacoes:target)) :is(#contato, #avaliacoes),
-      .catalog:has(#contato:target) :is(#menu, #avaliacoes),
-      .catalog:has(#avaliacoes:target) :is(#menu, #contato) { display: none; }
-      .catalog:not(:has(#contato:target, #avaliacoes:target)) a[href="#menu"],
+      .catalog:not(:has(#contato:target, #sobre:target)) :is(#contato, #sobre),
+      .catalog:has(#contato:target) :is(#menu, #sobre),
+      .catalog:has(#sobre:target) :is(#menu, #contato) { display: none; }
+      .catalog:not(:has(#contato:target, #sobre:target)) a[href="#menu"],
       .catalog:has(#contato:target) a[href="#contato"],
-      .catalog:has(#avaliacoes:target) a[href="#avaliacoes"] { color: var(--copper); }
-      .catalog:not(:has(#contato:target, #avaliacoes:target)) a[href="#menu"]::after,
+      .catalog:has(#sobre:target) a[href="#sobre"] { color: var(--copper); }
+      .catalog:not(:has(#contato:target, #sobre:target)) a[href="#menu"]::after,
       .catalog:has(#contato:target) a[href="#contato"]::after,
-      .catalog:has(#avaliacoes:target) a[href="#avaliacoes"]::after { opacity: 1; }
+      .catalog:has(#sobre:target) a[href="#sobre"]::after { opacity: 1; }
     }
     .tabs svg { flex: none; width: 18px; height: 18px; }
     .panel { padding: 30px clamp(19px, 5vw, 50px) 38px; scroll-margin-top: 72px; animation: enter .3s ease-out both; }
     @keyframes enter { from { opacity: 0; transform: translateY(5px); } }
     .heading h2 { font-size: clamp(2.25rem, 5vw, 3.35rem); }
     .heading p { margin-top: 7px; color: var(--muted); }
-    .menu-group + .menu-group { margin-top: 34px; }
-    .group-title { font-size: clamp(2rem, 4vw, 2.7rem); }
-    .group-intro { color: var(--muted); font-size: .875rem; margin-top: 6px; }
-    .menu-jump { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 27px; }
-    .menu-group { scroll-margin-top: 18px; }
     .menu-list { margin-top: 16px; }
     .menu-item { border-bottom: 1px solid var(--line); }
     .menu-item summary {
       display: grid;
-      grid-template-columns: 105px minmax(0, 1fr) 34px;
-      gap: 20px;
+      grid-template-columns: minmax(0, 1fr) auto 34px;
+      gap: 16px;
       align-items: center;
-      min-height: 126px;
+      min-height: 86px;
       padding: 14px 0;
       list-style: none;
       cursor: pointer;
     }
     .menu-item summary::-webkit-details-marker { display: none; }
-    .menu-item img { height: 96px; border-radius: 9px; background: #dcc1aa; }
     .menu-item summary strong {
-      display: block;
-      font: 400 clamp(1.6rem, 4vw, 2.15rem)/1.07 var(--serif);
+      font: 400 clamp(1.7rem, 4vw, 2.2rem)/1.05 var(--serif);
     }
-    .menu-item summary small, .dish-caption p { display: block; margin-top: 4px; color: var(--muted); font-size: .875rem; }
-    .menu-item summary .estimate { color: var(--copper); font-weight: 700; }
+    .estimate { color: var(--copper); text-align: right; white-space: nowrap; font-weight: 700; }
+    .estimate small { display: block; color: var(--muted); font-weight: 500; }
     .toggle {
       display: grid;
       width: 34px;
       aspect-ratio: 1;
       place-items: center;
-      border: 1px solid #cfac93;
+      border: 1px solid #cbb38c;
       border-radius: 50%;
       color: var(--copper);
-      transition: background .22s, color .22s;
     }
-    .toggle svg { width: 14px; height: 14px; }
     .toggle::before { content: "+"; font-size: 1.2rem; line-height: 1; }
-    .menu-item[open] .toggle, .menu-item summary:hover .toggle { background: var(--espresso); border-color: var(--espresso); color: var(--cream); }
+    .menu-item[open] .toggle, .menu-item summary:hover .toggle { background: var(--espresso); color: var(--cream); }
     .menu-item[open] .toggle::before { content: "−"; }
-    .menu-detail {
-      margin: 0 0 16px 125px;
-      padding: 15px 18px 18px;
-      border-radius: 10px;
-      background: #f4eade;
-      color: var(--muted);
-      animation: enter .25s ease-out both;
-    }
-    .menu-detail h3 { color: var(--ink); font-size: 1.55rem; }
-    .menu-detail ul { padding-left: 1.15em; margin: 9px 0 14px; }
-    .dish-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
-    .dish-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: #fffdfa; }
-    .dish-card img { aspect-ratio: 1.8; }
-    .dish-caption { display: grid; justify-items: start; gap: 5px; padding: 16px; flex: 1; }
-    .dish-caption h4 { margin: 0; font: 400 1.85rem/1 var(--serif); }
-    .dish-caption a { align-self: end; margin-top: 7px; }
+    .menu-detail { padding: 19px; margin-bottom: 14px; border-radius: 12px; background: #f5ede0; }
+    .menu-sections { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 26px; }
+    .menu-section h3, .service h3 { font-size: 1.6rem; }
+    .menu-section ul { padding-left: 1.15em; margin: 8px 0 0; }
+    .menu-section p, .service p { margin-top: 6px; color: var(--muted); font-size: .9rem; }
+    .menu-detail .secondary { margin-top: 22px; }
+    .service { margin-top: 24px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; }
     .primary, .secondary {
       display: inline-flex;
       align-items: center;
@@ -233,26 +217,30 @@
     .quote-result { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 9px; background: #f8efe5; }
     .quote-result textarea { width: 100%; min-height: 145px; padding: 9px; border: 1px solid var(--line); border-radius: 6px; background: #fffdfa; resize: vertical; }
     .notice { margin-top: 14px; font-size: .8125rem; color: var(--muted); }
-    .review-empty { margin-top: 21px; padding: 22px; border: 1px solid var(--line); border-radius: 10px; }
-    .review-empty h3 { font-size: 1.8rem; margin-bottom: 6px; }
-    .review-empty p { color: var(--muted); }
+    .about-photo { max-width: 350px; margin-top: 20px; border-radius: 14px; height: auto; }
+    .contact-row[href] { color: inherit; text-decoration: none; }
+    .contact-row[href]:hover { border-color: #b89a68; }
+    .quote select { font: inherit; min-height: 47px; width: 100%; padding: 8px 11px; background: #fffdfa; border: 1px solid #cdb6a4; border-radius: 7px; color: inherit; }
+    .quote fieldset { min-width: 0; padding: 10px 12px; margin: 12px 0 0; border: 1px solid var(--line); border-radius: 9px; }
+    .quote legend { font-weight: 700; padding: 0 5px; }
+    .quote .choice-option { display: flex; gap: 8px; align-items: center; min-height: 35px; }
+    .quote .choice-option input { width: 18px; min-height: 18px; accent-color: var(--copper); }
+    .choice-intro { color: var(--muted); font-size: .9rem; }
     .footer { padding: 18px 15px 28px; color: var(--muted); text-align: center; font-size: .8125rem; }
     @media (max-width: 1170px) and (min-width: 601px) { .stage { width: calc(100% - 40px); } }
     @media (max-width: 600px) {
       .stage { margin-top: 0; }
       .hero { align-items: end; min-height: 320px; border-radius: 0; padding: 28px 18px 54px; text-align: center; }
-      .hero img { object-position: 68% 63%; }
-      .hero::after { background: linear-gradient(0deg, #1c100df7 2%, #1c100dd6 29%, #1c100d4d 68%, #1c100d42); }
+      .hero img { width: 100%; object-position: 50% 14%; }
+      .hero::after { background: linear-gradient(0deg, #171513 0%, #171513f0 23%, #17151354 54%, transparent 75%); }
       .hero h1 { font-size: clamp(2.65rem, 10vw, 4rem); }
       .monogram { margin: 0 auto 12px; }
       .catalog { width: 100%; margin-top: -20px; border-inline: 0; border-radius: 20px 20px 0 0; }
       .tabs a { min-height: 57px; }
       .panel { padding-top: 24px; }
-      .menu-item summary { grid-template-columns: 74px minmax(0, 1fr) 30px; gap: 12px; min-height: 103px; }
-      .menu-item img { height: 74px; }
-      .toggle { width: 30px; }
-      .menu-detail { margin-left: 0; }
-      .dish-grid { grid-template-columns: 1fr; }
+      .menu-item summary { grid-template-columns: minmax(0, 1fr) auto 28px; gap: 10px; }
+      .toggle { width: 28px; }
+      .menu-sections { grid-template-columns: 1fr; gap: 15px; }
     }
     @media (max-width: 350px) {
       .tabs a { gap: 4px; font-size: .875rem; }
@@ -268,11 +256,11 @@
 <body>
   <main class="stage">
     <header class="hero">
-      <img src="assets/chef.webp" alt="" width="1536" height="1024" fetchpriority="high">
+      <img src="assets/chefe-valdo-retrato.jpg" alt="" width="640" height="1137" fetchpriority="high">
       <div>
-        <span class="monogram" aria-hidden="true">RM</span>
-        <h1>Chef Rafael Martins</h1>
-        <p>Gastronomia para eventos</p>
+        <span class="monogram" aria-hidden="true">CV</span>
+        <h1>Chefe Valdo</h1>
+        <p>Buffet para eventos em Fortaleza, CE</p>
       </div>
     </header>
 
@@ -286,139 +274,109 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="6.5" y="3" width="11" height="18" rx="2"/><path d="M10.5 17.5h3"/></svg>
           Contato
         </a>
-        <a href="#avaliacoes">
+        <a href="#sobre">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.2.9-4.5 4.4 1 6.2-5.4-2.9-5.4 2.9 1-6.2-4.5-4.4 6.2-.9Z"/></svg>
-          Avaliações
+          Sobre o chef
         </a>
       </nav>
 
       <section class="panel" id="menu" aria-labelledby="menu-title">
         <div class="heading">
           <h2 id="menu-title">Cardápio para eventos</h2>
+          <p>Abra um cardápio para ver os pratos e pedir orçamento.</p>
         </div>
-        <nav class="menu-jump" aria-label="Categorias do cardápio">
-          <a class="secondary" href="#pratos-principais">Pratos principais</a>
-          <a class="secondary" href="#pacotes">Ofertas e pacotes</a>
-        </nav>
-        <section class="menu-group" aria-labelledby="experiencias-title">
-          <h3 class="group-title" id="experiencias-title">Cardápios por ocasião</h3>
-          <div class="menu-list">
-            <details class="menu-item" name="event-menus">
-              <summary>
-                <img src="assets/quiche.webp" alt="" width="105" height="96">
-                <span><strong>Café da manhã</strong><small>Pães, frutas e quitutes para receber bem.</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>Sugestão de menu</h3>
-                <ul><li>Pães artesanais e geleias</li><li>Mini quiche de queijo e ervas</li><li>Frutas da estação, café e sucos</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Café da manhã">Pedir orçamento</a>
+        <div class="menu-list">
+          <details class="menu-item" id="feijoada" name="event-menus">
+            <summary>
+              <strong>Feijoada</strong>
+              <span class="estimate">R$ 70,00<small>por pessoa</small></span>
+              <span class="toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="menu-detail">
+              <div class="menu-sections">
+                <section class="menu-section"><h3>Entradas</h3><ul><li>Mini travesseirinho de carne</li><li>Dadinho de tapioca</li><li>Mexicano</li></ul></section>
+                <section class="menu-section"><h3>Salgadinhos</h3><p>15 unidades por pessoa.</p><ul><li>Canudinho</li><li>Minipastéis</li><li>Minipizza</li><li>Coxinha de frango</li><li>Bolinha de queijo</li></ul></section>
+                <section class="menu-section"><h3>Feijoada</h3><ul><li>Mocotó de porco</li><li>Bacon</li><li>Carne de charque</li><li>Linguiça paio</li><li>Costelinha</li></ul></section>
+                <section class="menu-section"><h3>Acompanhamentos</h3><ul><li>Arroz branco</li><li>Farofa</li><li>Torresmo</li><li>Couve-manteiga</li><li>Laranja</li></ul></section>
+                <section class="menu-section" data-choice-limit="1"><h3>Sobremesa</h3><p>Escolha 1.</p><ul><li>Pudim</li><li>Delícia de abacaxi</li><li>Pavê</li><li>Torta de limão</li></ul></section>
               </div>
-            </details>
-            <details class="menu-item" name="event-menus">
-              <summary>
-                <img src="assets/bruschetta.webp" alt="" width="105" height="96">
-                <span><strong>Brunch</strong><small>Opções doces e salgadas para encontros no fim da manhã.</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>Sugestão de menu</h3>
-                <ul><li>Bruschetta de tomate assado</li><li>Mini quiche de queijo e ervas</li><li>Cheesecake de limão e frutas frescas</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Brunch">Pedir orçamento</a>
+              <a class="secondary" href="#contato" data-menu="feijoada">Pedir orçamento<span class="sr-only"> de Feijoada</span></a>
+            </div>
+          </details>
+          <details class="menu-item" id="massas" name="event-menus">
+            <summary>
+              <strong>Massas</strong>
+              <span class="estimate">R$ 80,00<small>por pessoa</small></span>
+              <span class="toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="menu-detail">
+              <div class="menu-sections">
+                <section class="menu-section"><h3>Entradas</h3><ul><li>Mini travesseirinho de carne</li><li>Minissanduíches</li><li>Mexicano</li></ul></section>
+                <section class="menu-section"><h3>Salgadinhos</h3><p>15 unidades por pessoa.</p><ul><li>Canudinho</li><li>Minipastéis</li><li>Minipizza</li><li>Coxinha de frango</li><li>Bolinha de queijo</li></ul></section>
+                <section class="menu-section" data-choice-limit="3"><h3>Massas</h3><p>Escolha 3.</p><ul><li>Talharim</li><li>Fettuccine</li><li>Penne</li><li>Yakisoba</li></ul></section>
+                <section class="menu-section" data-choice-limit="3"><h3>Molhos</h3><p>Escolha 3.</p><ul><li>Bolonhesa</li><li>Carbonara</li><li>Petisciano</li><li>Pesto italiano</li><li>Quatro queijos</li><li>Cheddar</li></ul></section>
+                <section class="menu-section" data-choice-limit="2"><h3>Sobremesas</h3><p>Escolha 2.</p><ul><li>Pudim</li><li>Delícia de abacaxi</li><li>Pavê</li><li>Torta de limão</li></ul></section>
               </div>
-            </details>
-            <details class="menu-item" name="event-menus">
-              <summary>
-                <img src="assets/file.webp" alt="" width="105" height="96">
-                <span><strong>Jantar especial</strong><small>Um menu servido à mesa para celebrar a ocasião.</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>Sugestão de menu</h3>
-                <ul><li>Bruschetta de tomate assado</li><li>Filé ao molho de vinho com risoto de parmesão</li><li>Mousse de chocolate com frutas vermelhas</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Jantar especial">Pedir orçamento</a>
+              <a class="secondary" href="#contato" data-menu="massas">Pedir orçamento<span class="sr-only"> de Massas</span></a>
+            </div>
+          </details>
+          <details class="menu-item" id="pratos-quentes" name="event-menus">
+            <summary>
+              <strong>Pratos quentes</strong>
+              <span class="estimate">R$ 85,00<small>por pessoa</small></span>
+              <span class="toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="menu-detail">
+              <div class="menu-sections">
+                <section class="menu-section"><h3>Entradas</h3><ul><li>Mini travesseirinho de carne</li><li>Minissanduíches</li><li>Mexicano</li></ul></section>
+                <section class="menu-section"><h3>Salgadinhos</h3><p>15 unidades por pessoa.</p><ul><li>Canudinho</li><li>Minipastéis</li><li>Minipizza</li><li>Coxinha de frango</li><li>Bolinha de queijo</li></ul></section>
+                <section class="menu-section" data-choice-limit="2"><h3>Proteínas</h3><p>Escolha 2.</p><ul><li>Filé ao molho madeira</li><li>Filé recheado ao molho madeira</li><li>Frango indiano</li><li>Frango ao molho de queijo</li><li>Frango ao molho de mostarda</li></ul></section>
+                <section class="menu-section"><h3>Acompanhamentos</h3><ul><li>4 opções de arroz — escolha 2.</li><li>4 opções de salada — escolha 1.</li></ul></section>
+                <section class="menu-section" data-choice-limit="2"><h3>Sobremesas</h3><p>Escolha 2.</p><ul><li>Pudim</li><li>Delícia de abacaxi</li><li>Pavê</li><li>Torta de limão</li></ul></section>
               </div>
-            </details>
-            <details class="menu-item" name="event-menus">
-              <summary>
-                <img src="assets/legumes.webp" alt="" width="105" height="96">
-                <span><strong>Buffet para eventos</strong><small>Pratos e acompanhamentos em uma mesa para compartilhar.</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>Sugestão de menu</h3>
-                <ul><li>Mini quiches de queijo e ervas</li><li>Risoto de parmesão e legumes assados</li><li>Mousse de chocolate e cheesecake de limão</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Buffet para eventos">Pedir orçamento</a>
+              <a class="secondary" href="#contato" data-menu="pratos-quentes">Pedir orçamento<span class="sr-only"> de Pratos quentes</span></a>
+            </div>
+          </details>
+          <details class="menu-item" id="sushi" name="event-menus">
+            <summary>
+              <strong>Sushi</strong>
+              <span class="estimate">R$ 100,00<small>por pessoa</small></span>
+              <span class="toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="menu-detail">
+              <div class="menu-sections">
+                <section class="menu-section"><h3>Opções de sushi</h3><ul><li>Sashimi</li><li>Nigiri</li><li>Hossomaki</li><li>Uramaki</li><li>Valdomak</li><li>Hot roll</li></ul></section>
               </div>
-            </details>
+              <a class="secondary" href="#contato" data-menu="sushi">Pedir orçamento<span class="sr-only"> de Sushi</span></a>
+            </div>
+          </details>
+          <details class="menu-item" id="frutos-do-mar" name="event-menus">
+            <summary>
+              <strong>Frutos do mar</strong>
+              <span class="estimate">R$ 130,00<small>por pessoa</small></span>
+              <span class="toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="menu-detail">
+              <div class="menu-sections">
+                <section class="menu-section"><h3>Entradas</h3><ul><li>Mini travesseirinho de carne</li><li>Tortinhas adocicadas</li><li>Dadinho de queijo</li></ul></section>
+                <section class="menu-section"><h3>Salgadinhos</h3><p>15 unidades por pessoa.</p><ul><li>Canudinho</li><li>Minipastéis</li><li>Minipizza</li><li>Coxinha de frango</li><li>Bolinha de queijo</li></ul></section>
+                <section class="menu-section"><h3>Opções de peixe</h3><ul><li>Peixe à delícia</li><li>Peixe puxado ao molho de ervas</li><li>Peixe ao molho de camarão</li></ul></section>
+                <section class="menu-section"><h3>Acompanhamentos</h3><ul><li>Arroz com açafrão</li><li>Arroz com brócolis</li><li>Arroz branco</li><li>Salada verde</li><li>Molho para salada</li></ul></section>
+                <section class="menu-section"><h3>Sobremesa</h3><p>1 sobremesa incluída.</p></section>
+              </div>
+              <a class="secondary" href="#contato" data-menu="frutos-do-mar">Pedir orçamento<span class="sr-only"> de Frutos do mar</span></a>
+            </div>
+          </details>
+        </div>
+        <section class="service" aria-labelledby="service-title">
+          <h3 id="service-title">Incluído em todos os cardápios</h3>
+          <p>4 horas de evento com equipe de apoio, pratos, talheres, taças, suqueira e rechauds.</p>
+          <p>Água, refrigerantes e 2 sabores de suco à escolha.</p>
+          <div id="juice-choices" class="menu-section" data-choice-limit="2">
+            <h3 class="sr-only">Sabores de suco</h3>
+            <ul><li>Caju</li><li>Cajá</li><li>Acerola</li><li>Goiaba</li><li>Manga</li></ul>
           </div>
         </section>
-
-        <section class="menu-group" id="pratos-principais" aria-labelledby="pratos-title">
-          <h3 class="group-title" id="pratos-title">Pratos principais</h3>
-          <div class="dish-grid">
-            <article class="dish-card">
-              <img src="assets/file.webp" alt="" loading="lazy">
-              <div class="dish-caption">
-                <h4>Filé ao molho de vinho</h4>
-                <p>Medalhão selado servido com molho encorpado de vinho.</p>
-                <a class="secondary" href="#contato" data-occasion="Menu com filé ao molho de vinho">Incluir no orçamento</a>
-              </div>
-            </article>
-            <article class="dish-card">
-              <img src="assets/risoto.webp" alt="" loading="lazy">
-              <div class="dish-caption">
-                <h4>Risoto cremoso de parmesão</h4>
-                <p>Finalizado com lascas de parmesão e pimenta-do-reino.</p>
-                <a class="secondary" href="#contato" data-occasion="Menu com risoto de parmesão">Incluir no orçamento</a>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="menu-group" id="pacotes" aria-labelledby="pacotes-title">
-          <h3 class="group-title" id="pacotes-title">Ofertas e pacotes</h3>
-          <p class="group-intro">Consulte valores para a data e o número de convidados.</p>
-          <div class="menu-list">
-            <details class="menu-item" name="event-packages">
-              <summary>
-                <img src="assets/quiche.webp" alt="" width="105" height="96" loading="lazy">
-                <span><strong>Mesa de Boas-vindas</strong><small>Entradas e petiscos para a recepção.</small><small class="estimate">Sob consulta</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>O que pode incluir</h3>
-                <ul><li>Mini quiches de queijo e ervas</li><li>Bruschettas de tomate e manjericão</li><li>Legumes assados para compartilhar</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Pacote Mesa de Boas-vindas">Pedir orçamento</a>
-              </div>
-            </details>
-            <details class="menu-item" name="event-packages">
-              <summary>
-                <img src="assets/risoto.webp" alt="" width="105" height="96" loading="lazy">
-                <span><strong>Buffet Premium</strong><small>Entradas, pratos quentes e sobremesa.</small><small class="estimate">Sob consulta</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>O que pode incluir</h3>
-                <ul><li>Bruschettas e mini quiches</li><li>Risoto de parmesão e legumes ao forno</li><li>Cheesecake de limão</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Pacote Buffet Premium">Pedir orçamento</a>
-              </div>
-            </details>
-            <details class="menu-item" name="event-packages">
-              <summary>
-                <img src="assets/mousse.webp" alt="" width="105" height="96" loading="lazy">
-                <span><strong>Jantar Prime</strong><small>Jantar em três etapas, servido à mesa.</small><small class="estimate">Sob consulta</small></span>
-                <span class="toggle" aria-hidden="true"></span>
-              </summary>
-              <div class="menu-detail">
-                <h3>O que pode incluir</h3>
-                <ul><li>Entrada de bruschetta de tomate assado</li><li>Filé ao molho de vinho com risoto</li><li>Mousse de chocolate com frutas vermelhas</li></ul>
-                <a class="secondary" href="#contato" data-occasion="Pacote Jantar Prime">Pedir orçamento</a>
-              </div>
-            </details>
-          </div>
-        </section>
-        <p class="notice">Sugestões demonstrativas. Fotos ilustrativas.</p>
       </section>
 
       <section class="panel" id="contato" aria-labelledby="contact-title">
@@ -426,99 +384,65 @@
           <h2 id="contact-title">Contatos</h2>
         </div>
         <div class="contact-list">
-          <div class="contact-card contact-row">
-            <span class="contact-icon phone" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7.1 3H4.5C3.7 3 3 3.7 3 4.6A16.4 16.4 0 0 0 19.4 21c.9 0 1.6-.7 1.6-1.5v-2.6l-4.5-2-1.7 2a13.1 13.1 0 0 1-7.6-7.6l2-1.7L7.1 3ZM15 4a6 6 0 0 1 5 5"/></svg>
-            </span>
-            <span><strong class="contact-name">Telefone</strong><span class="contact-meta">Número a confirmar</span></span>
-          </div>
-
-          <details id="whatsapp-card" class="contact-card">
+          <details id="whatsapp-card" class="contact-card" open>
             <summary class="contact-row">
               <span class="contact-icon whatsapp" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M20.7 11.8a8.7 8.7 0 0 1-8.8 8.7 8.8 8.8 0 0 1-4.2-1.1l-4.3 1.2 1.2-4.1a8.7 8.7 0 1 1 16.1-4.7Z"/><path d="M8.7 7.3c.5 0 .9 1.2 1.2 1.9.2.4-.2.8-.7 1.3.7 1.5 2.1 2.8 3.7 3.4.5-.6.8-1.2 1.3-1 .6.2 2.1 1 2.2 1.3.2.8-.8 1.8-1.7 1.9-2 .3-4.2-1.1-5.6-2.5-1.3-1.4-2.5-3.2-2.2-4.7.2-.9 1.1-1.7 1.8-1.6Z" fill="currentColor" stroke="none"/></svg>
               </span>
-              <span><strong class="contact-name">WhatsApp</strong><span class="contact-meta">Pedidos de orçamento</span></span>
+              <span><strong class="contact-name">WhatsApp</strong><span class="contact-meta">+55 85 98976-5643</span></span>
               <span class="contact-cta"><span class="contact-open">Abrir</span><span class="contact-close">Fechar</span></span>
             </summary>
             <div class="contact-content">
-              <div id="contact-shortcut">
-                <a class="primary" href="https://wa.me/?text=Ol%C3%A1%21%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20para%20um%20evento.%0A%0ACard%C3%A1pio%3A%0AData%3A%0ALocal%3A%0AN%C3%BAmero%20de%20convidados%3A" target="_blank" rel="noopener noreferrer">Abrir modelo no WhatsApp</a>
-                <p class="notice">Nesta prévia, você escolhe o destinatário no WhatsApp.</p>
-              </div>
+              <noscript><a class="primary" href="https://wa.me/5585989765643">Pedir orçamento no WhatsApp</a></noscript>
               <form class="quote" id="quote" hidden>
-                <label>Tipo de evento ou cardápio <input id="occasion" name="occasion" placeholder="Ex.: Brunch para aniversário"></label>
+                <label>Cardápio
+                  <select name="menu" id="selected-menu" required>
+                    <option value="">Selecione um cardápio</option>
+                    <option value="feijoada">Feijoada</option>
+                    <option value="massas">Massas</option>
+                    <option value="pratos-quentes">Pratos quentes</option>
+                    <option value="sushi">Sushi</option>
+                    <option value="frutos-do-mar">Frutos do mar</option>
+                  </select>
+                </label>
                 <div class="quote-grid">
-                  <label>Data <input type="date" name="date"></label>
-                  <label>Convidados <input type="number" min="1" name="guests" placeholder="Ex.: 30"></label>
+                  <label>Data <input type="date" name="date" required></label>
+                  <label>Convidados <input type="number" name="guests" min="1" step="1" inputmode="numeric" placeholder="Ex.: 30" required></label>
                 </div>
-                <label>Local <input name="location" placeholder="Cidade ou local do evento"></label>
+                <label>Local <input name="location" placeholder="Bairro ou local do evento" required></label>
+                <div id="quote-choices" hidden>
+                  <p class="choice-intro">Se você já souber o que quer servir, inclua suas escolhas no pedido.</p>
+                  <div id="choice-groups"></div>
+                </div>
                 <button class="primary" type="submit">Preparar mensagem</button>
                 <div class="quote-result" id="quote-result" hidden>
                   <label>Mensagem pronta <textarea id="quote-message" readonly></textarea></label>
                   <a class="secondary" id="whatsapp" target="_blank" rel="noopener noreferrer">Abrir no WhatsApp</a>
-                  <p class="notice">Nesta prévia, você escolhe o destinatário no WhatsApp.</p>
                 </div>
               </form>
             </div>
           </details>
 
-          <div class="contact-card contact-row">
+          <a class="contact-card contact-row" href="https://www.instagram.com/chefedecozinhavaldo/" target="_blank" rel="noopener noreferrer">
             <span class="contact-icon instagram" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.7"/><circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/></svg>
             </span>
-            <span><strong class="contact-name">Instagram</strong><span class="contact-meta">Perfil a confirmar</span></span>
-          </div>
+            <span><strong class="contact-name">Instagram</strong><span class="contact-meta">@chefedecozinhavaldo</span></span>
+          </a>
         </div>
       </section>
 
-      <section class="panel" id="avaliacoes" aria-labelledby="reviews-title">
-        <div class="heading"><h2 id="reviews-title">Avaliações</h2></div>
-        <div class="review-empty">
-          <h3>Aguardando avaliações</h3>
-          <p>Os depoimentos de clientes aparecerão aqui quando estiverem disponíveis.</p>
+      <section class="panel" id="sobre" aria-labelledby="about-title">
+        <div class="heading">
+          <h2 id="about-title">Sobre o Chefe Valdo</h2>
+          <p>Buffet para eventos em Fortaleza, com cardápios que você pode personalizar para a sua ocasião.</p>
         </div>
+        <img class="about-photo" src="assets/chefe-valdo-apresentando.jpg" alt="Chefe Valdo de uniforme, apresentando um prato" width="804" height="1429" loading="lazy">
       </section>
     </div>
-    <footer class="footer">Chef Rafael Martins · Cardápio demonstrativo</footer>
+    <footer class="footer">Chefe Valdo · Buffet para eventos em Fortaleza, CE</footer>
   </main>
 
-  <script>
-    const whatsAppCard = document.getElementById("whatsapp-card");
-    const quoteForm = document.getElementById("quote");
-    const quoteResult = document.getElementById("quote-result");
-    const occasion = document.getElementById("occasion");
-    const messageField = document.getElementById("quote-message");
-    const whatsApp = document.getElementById("whatsapp");
-
-    quoteForm.hidden = false;
-    document.getElementById("contact-shortcut").hidden = true;
-
-    document.querySelectorAll("[data-occasion]").forEach(link => {
-      link.addEventListener("click", () => {
-        whatsAppCard.open = true;
-        occasion.value = link.dataset.occasion;
-        quoteResult.hidden = true;
-      });
-    });
-    quoteForm.addEventListener("input", () => { quoteResult.hidden = true; });
-    quoteForm.addEventListener("submit", event => {
-      event.preventDefault();
-      const form = new FormData(quoteForm);
-      const date = form.get("date").split("-").reverse().join("/");
-      const message = [
-        "Olá! Gostaria de solicitar um orçamento para um evento.",
-        "",
-        "Tipo de evento ou cardápio: " + form.get("occasion").trim(),
-        "Data: " + date,
-        "Local: " + form.get("location").trim(),
-        "Número de convidados: " + form.get("guests")
-      ].join("\n");
-      messageField.value = message;
-      whatsApp.href = "https://wa.me/?text=" + encodeURIComponent(message);
-      quoteResult.hidden = false;
-      messageField.focus();
-    });
-  </script>
+  <script src="quote.js" defer></script>
 </body>
 </html>
