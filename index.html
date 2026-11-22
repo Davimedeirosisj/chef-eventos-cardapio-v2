@@ -7,6 +7,18 @@
   <meta name="description" content="Buffet do Chefe Valdo para eventos em Fortaleza. Conheça os cinco cardápios e peça seu orçamento pelo WhatsApp.">
   <title>Chefe Valdo · Buffet para eventos em Fortaleza</title>
   <link rel="canonical" href="https://chef-eventos-cardapio-v2.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Chefe Valdo">
+  <meta property="og:url" content="https://chef-eventos-cardapio-v2.vercel.app/">
+  <meta property="og:title" content="Chefe Valdo · Gastronomia com propósito">
+  <meta property="og:description" content="Buffet para eventos em Fortaleza. Conheça os cardápios e peça seu orçamento.">
+  <meta property="og:image" content="https://chef-eventos-cardapio-v2.vercel.app/assets/chefe-valdo-compartilhar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Retrato do Chefe Valdo e o slogan Gastronomia com propósito">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
@@ -92,13 +104,25 @@
     }
     .hero h1 { font-size: clamp(3rem, 6.5vw, 5.85rem); letter-spacing: -.035em; text-wrap: balance; }
     .hero .slogan { margin-top: 10px; color: var(--light-copper); font: italic 400 clamp(1.65rem, 3vw, 2.35rem)/1.05 var(--serif); }
-    .hero-actions {
-      display: flex;
+    .hero-actions { display: flex; align-items: center; gap: 7px; margin-top: 10px; }
+    .hero .hero-location { margin-top: 9px; color: #e9dccc; font-size: .9rem; }
+    .hero-menu-link {
+      display: inline-flex;
       align-items: center;
-      gap: 5px;
-      margin-top: 7px;
+      justify-content: center;
+      min-height: 44px;
+      padding: 6px 15px;
+      border: 1px solid #ecd4a6;
+      border-radius: 999px;
+      background: linear-gradient(145deg, #f5e0b4, #d9ae70);
+      box-shadow: inset 0 1px 0 #fff2d7a0, 0 5px 16px #08060442;
+      color: #2d1d0c;
+      text-decoration: none;
+      font-size: .86rem;
+      font-weight: 700;
     }
-    .hero .hero-location { min-width: 0; color: #e9dccc; font-size: .9rem; }
+    .hero-menu-link:hover { background: #f5e0b4; }
+    .hero-menu-link:focus-visible { outline-color: #f5d693; }
     .share-link {
       display: inline-grid;
       place-items: center;
@@ -181,14 +205,14 @@
       opacity: 0;
     }
     @supports selector(:has(*)) {
-      .catalog:not(:has(#contato:target, #sobre:target)) :is(#contato, #sobre),
-      .catalog:has(#contato:target) :is(#menu, #sobre),
+      .catalog:not(:has(:is(#contato, #whatsapp-card):target, #sobre:target)) :is(#contato, #sobre),
+      .catalog:has(:is(#contato, #whatsapp-card):target) :is(#menu, #sobre),
       .catalog:has(#sobre:target) :is(#menu, #contato) { display: none; }
-      .catalog:not(:has(#contato:target, #sobre:target)) a[href="#menu"],
-      .catalog:has(#contato:target) a[href="#contato"],
+      .catalog:not(:has(:is(#contato, #whatsapp-card):target, #sobre:target)) a[href="#menu"],
+      .catalog:has(:is(#contato, #whatsapp-card):target) a[href="#contato"],
       .catalog:has(#sobre:target) a[href="#sobre"] { color: var(--copper); }
-      .catalog:not(:has(#contato:target, #sobre:target)) a[href="#menu"]::after,
-      .catalog:has(#contato:target) a[href="#contato"]::after,
+      .catalog:not(:has(:is(#contato, #whatsapp-card):target, #sobre:target)) a[href="#menu"]::after,
+      .catalog:has(:is(#contato, #whatsapp-card):target) a[href="#contato"]::after,
       .catalog:has(#sobre:target) a[href="#sobre"]::after { opacity: 1; }
     }
     .tabs svg { flex: none; width: 18px; height: 18px; }
@@ -277,7 +301,9 @@
     }
     .whatsapp-action:hover { background: linear-gradient(145deg, #408268, #215d41 54%, #123e2d); }
     .whatsapp-action svg { width: 18px; height: 18px; flex: none; }
-    .contact-list { display: grid; gap: 14px; max-width: 650px; margin: 22px 0 0; }
+    .contact-actions, .about-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .contact-list { display: grid; gap: 14px; max-width: 650px; margin: 16px 0 0; }
+    #whatsapp-card { scroll-margin-top: 76px; }
     .contact-card {
       border: 1px solid var(--line);
       border-radius: 14px;
@@ -357,7 +383,36 @@
       overflow-wrap: anywhere;
     }
     .notice { margin-top: 14px; font-size: .8125rem; color: var(--muted); }
-    .about-photo { max-width: 350px; margin-top: 20px; border-radius: 14px; height: auto; }
+    .quote-estimate {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: linear-gradient(145deg, #fffdfa, #f5ecdd);
+      overflow-wrap: anywhere;
+    }
+    .quote-estimate strong { font-size: 1.25rem; color: #624318; }
+    .quote-estimate small { color: var(--muted); }
+    .event-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 20px;
+    }
+    .event-gallery figure { margin: 0; min-width: 0; }
+    .event-gallery .event-cover { grid-column: 1 / -1; }
+    .event-gallery img { height: auto; aspect-ratio: 1; border-radius: 12px; background: #f1e5d4; }
+    .event-gallery .event-cover img { aspect-ratio: 3 / 2; }
+    .event-gallery figcaption { margin: 5px 1px 0; color: var(--muted); font-size: .82rem; }
+    .booking-info { margin-top: 24px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: #f8f0e4; }
+    .booking-info h3 { font-size: 1.75rem; }
+    .booking-info ul { margin: 9px 0 0; padding-left: 1.15em; }
+    .booking-info li + li { margin-top: 7px; }
+    @media (max-width: 520px) {
+      .contact-actions > a { flex: 1 1 100%; }
+    }
     .contact-row[href] { color: inherit; text-decoration: none; }
     .contact-row[href]:hover { border-color: #b89a68; }
     .quote fieldset { min-width: 0; padding: 8px 10px 10px; margin: 13px 0 0; border: 1px solid var(--line); border-radius: 12px; }
@@ -407,7 +462,7 @@
       .hero-glass :is(h1, .slogan, .hero-location) { text-shadow: 0 2px 12px #080604b3; }
       .hero h1 { font-size: clamp(2.65rem, 10vw, 4rem); }
       .hero .slogan { margin-top: 7px; color: #f4d59c; }
-      .hero-actions { justify-content: center; margin-top: 4px; }
+      .hero-actions { justify-content: center; margin-top: 8px; }
       .share-url { margin-inline: auto; }
       .catalog { width: 100%; margin-top: -20px; border-inline: 0; border-radius: 20px 20px 0 0; }
       .tabs a { min-height: 57px; }
@@ -448,8 +503,9 @@
         <div class="hero-glass">
           <h1>Chefe Valdo</h1>
           <p class="slogan">Gastronomia com propósito</p>
+          <p class="hero-location">Buffet para eventos em Fortaleza, CE</p>
           <div class="hero-actions">
-            <p class="hero-location">Buffet para eventos em Fortaleza, CE</p>
+            <a class="hero-menu-link" href="#menu">Ver cardápios</a>
             <button class="share-link" id="share-site" type="button" aria-label="Compartilhar o site do Chefe Valdo" title="Compartilhar" hidden>
               <span class="share-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/></svg></span>
             </button>
@@ -486,7 +542,7 @@
             <summary>
               <img class="menu-photo" src="assets/cardapio-pratos-quentes.webp" width="420" height="336" alt="" loading="lazy" decoding="async">
               <strong>Pratos quentes</strong>
-              <span class="estimate">R$ 85,00<small>por pessoa</small></span>
+              <span class="estimate" data-price-cents="8500">R$ 85,00<small>por pessoa</small></span>
               <span class="toggle" aria-hidden="true"></span>
             </summary>
             <div class="menu-detail">
@@ -505,7 +561,7 @@
             <summary>
               <img class="menu-photo" src="assets/cardapio-massas.webp" width="420" height="336" alt="" loading="lazy" decoding="async">
               <strong>Massas</strong>
-              <span class="estimate">R$ 80,00<small>por pessoa</small></span>
+              <span class="estimate" data-price-cents="8000">R$ 80,00<small>por pessoa</small></span>
               <span class="toggle" aria-hidden="true"></span>
             </summary>
             <div class="menu-detail">
@@ -523,7 +579,7 @@
             <summary>
               <img class="menu-photo" src="assets/cardapio-feijoada.webp" width="420" height="336" alt="" loading="lazy" decoding="async">
               <strong>Feijoada</strong>
-              <span class="estimate">R$ 70,00<small>por pessoa</small></span>
+              <span class="estimate" data-price-cents="7000">R$ 70,00<small>por pessoa</small></span>
               <span class="toggle" aria-hidden="true"></span>
             </summary>
             <div class="menu-detail">
@@ -541,7 +597,7 @@
             <summary>
               <img class="menu-photo" src="assets/cardapio-sushi.webp" width="420" height="336" alt="" loading="lazy" decoding="async">
               <strong>Sushi</strong>
-              <span class="estimate">R$ 100,00<small>por pessoa</small></span>
+              <span class="estimate" data-price-cents="10000">R$ 100,00<small>por pessoa</small></span>
               <span class="toggle" aria-hidden="true"></span>
             </summary>
             <div class="menu-detail">
@@ -555,7 +611,7 @@
             <summary>
               <img class="menu-photo" src="assets/cardapio-frutos-do-mar.webp" width="420" height="336" alt="" loading="lazy" decoding="async">
               <strong>Frutos do mar</strong>
-              <span class="estimate">R$ 130,00<small>por pessoa</small></span>
+              <span class="estimate" data-price-cents="13000">R$ 130,00<small>por pessoa</small></span>
               <span class="toggle" aria-hidden="true"></span>
             </summary>
             <div class="menu-detail">
@@ -584,7 +640,11 @@
 
       <section class="panel" id="contato" aria-labelledby="contact-title">
         <div class="heading">
-          <h2 id="contact-title">Contatos</h2>
+          <h2 id="contact-title">Contato</h2>
+        </div>
+        <div class="contact-actions">
+          <a class="primary" href="#whatsapp-card" data-open-quote>Montar orçamento</a>
+          <a class="secondary" href="https://wa.me/5585989765643" target="_blank" rel="noopener noreferrer">Falar direto no WhatsApp</a>
         </div>
         <div class="contact-list">
           <details id="whatsapp-card" class="contact-card" open>
@@ -592,7 +652,7 @@
               <span class="contact-icon whatsapp" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M20.7 11.8a8.7 8.7 0 0 1-8.8 8.7 8.8 8.8 0 0 1-4.2-1.1l-4.3 1.2 1.2-4.1a8.7 8.7 0 1 1 16.1-4.7Z"/><path d="M8.7 7.3c.5 0 .9 1.2 1.2 1.9.2.4-.2.8-.7 1.3.7 1.5 2.1 2.8 3.7 3.4.5-.6.8-1.2 1.3-1 .6.2 2.1 1 2.2 1.3.2.8-.8 1.8-1.7 1.9-2 .3-4.2-1.1-5.6-2.5-1.3-1.4-2.5-3.2-2.2-4.7.2-.9 1.1-1.7 1.8-1.6Z" fill="currentColor" stroke="none"/></svg>
               </span>
-              <span><strong class="contact-name">WhatsApp</strong><span class="contact-meta">+55 85 98976-5643</span></span>
+              <span><strong class="contact-name">Formulário de orçamento</strong><span class="contact-meta">+55 85 98976-5643</span></span>
               <span class="contact-cta"><span class="contact-open">Abrir</span><span class="contact-close">Fechar</span></span>
             </summary>
             <div class="contact-content">
@@ -609,9 +669,14 @@
                   </select>
                 </label>
                 <div class="quote-grid">
-                  <label>Data <input type="date" name="date" required></label>
-                  <label>Convidados <input type="number" name="guests" min="1" step="1" inputmode="numeric" placeholder="Ex.: 30" required></label>
+                  <label>Data do evento <input type="date" name="date" required></label>
+                  <label>Convidados <input type="number" id="guest-count" name="guests" min="1" step="1" inputmode="numeric" placeholder="Ex.: 30" required></label>
                 </div>
+                <output class="quote-estimate" id="quote-estimate" for="selected-menu guest-count" aria-live="polite" hidden>
+                  <small id="quote-estimate-breakdown"></small>
+                  <strong id="quote-estimate-total"></strong>
+                  <small>Valor estimado, sujeito à confirmação pelo WhatsApp.</small>
+                </output>
                 <label>Local <input name="location" placeholder="Bairro ou local do evento" required></label>
                 <div id="quote-choices" hidden>
                   <p class="choice-intro">Se você já souber o que quer servir, inclua suas escolhas no pedido.</p>
@@ -644,7 +709,32 @@
           <h2 id="about-title">Sobre o Chefe Valdo</h2>
           <p>Buffet para eventos em Fortaleza, com cardápios que você pode personalizar para a sua ocasião.</p>
         </div>
-        <img class="about-photo" src="assets/chefe-valdo-apresentando.jpg" alt="Chefe Valdo de uniforme, apresentando um prato" width="804" height="1429" loading="lazy">
+        <div class="event-gallery">
+          <figure class="event-cover">
+            <img src="assets/chefe-valdo-buffet-evento.webp" alt="Chefe Valdo ao lado de uma mulher, com o buffet montado à frente" width="1000" height="667" loading="lazy" decoding="async">
+            <figcaption>Chefe Valdo com o buffet montado para um evento.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/chefe-valdo-sushi-evento.webp" alt="Chefe Valdo apresentando bandejas de sushi" width="600" height="600" loading="lazy" decoding="async">
+            <figcaption>Chefe Valdo apresentando a seleção de sushi.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/chefe-valdo-acompanhamentos-evento.webp" alt="Travessas de saladas e arroz dispostas sobre a mesa do buffet" width="600" height="600" loading="lazy" decoding="async">
+            <figcaption>Saladas e arrozes na mesa do buffet.</figcaption>
+          </figure>
+        </div>
+        <div class="booking-info">
+          <h3>Para pedir um orçamento</h3>
+          <ul>
+            <li><strong>Onde atendemos:</strong> Fortaleza, CE. Consulte o chef sobre outras localidades.</li>
+            <li><strong>O que informar:</strong> cardápio, data, bairro ou local e número de convidados.</li>
+            <li><strong>O que está incluído:</strong> 4 horas de evento, equipe, louças, taças, talheres, suqueira e rechauds.</li>
+            <li><strong>Disponibilidade e mínimo de convidados:</strong> consulte no WhatsApp.</li>
+          </ul>
+          <div class="about-actions">
+            <a class="primary" href="#whatsapp-card" data-open-quote>Montar orçamento</a>
+          </div>
+        </div>
       </section>
     </div>
     <footer class="footer">Chefe Valdo · Buffet para eventos em Fortaleza, CE</footer>
