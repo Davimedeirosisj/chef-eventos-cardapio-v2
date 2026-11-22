@@ -4,6 +4,9 @@ const eventDate = form.elements.date;
 const guestCount = form.elements.guests;
 const choices = document.getElementById("quote-choices");
 const choiceGroups = document.getElementById("choice-groups");
+const choiceSummary = document.getElementById("choice-summary");
+const choiceSummaryTitle = document.getElementById("choice-summary-title");
+const choiceSummaryList = document.getElementById("choice-summary-list");
 const estimate = document.getElementById("quote-estimate");
 const estimateBreakdown = document.getElementById("quote-estimate-breakdown");
 const estimateTotal = document.getElementById("quote-estimate-total");
@@ -13,6 +16,7 @@ const messageField = document.getElementById("quote-message");
 const whatsappLink = document.getElementById("whatsapp");
 const quoteCard = document.getElementById("whatsapp-card");
 const menuSelections = new Map();
+let checkingChoices = false;
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const fortalezaCalendar = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Fortaleza", year: "numeric", month: "2-digit", day: "2-digit"
@@ -49,18 +53,50 @@ function showEstimate() {
   if (estimateTotal.textContent !== total) estimateTotal.textContent = total;
 }
 
+function missingChoiceText(count) {
+  return count === 1 ? "Selecione mais 1 opção." : "Selecione mais " + count + " opções.";
+}
+
+function updateChoiceSummary() {
+  const missingItems = [];
+
+  for (const group of choiceGroups.querySelectorAll("fieldset")) {
+    const missing = Number(group.dataset.requiredCount) - group.querySelectorAll("input:checked").length;
+    group.classList.toggle("choice-error", checkingChoices && missing > 0);
+    if (checkingChoices && missing > 0) {
+      const item = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = group.dataset.title + ": " + missingChoiceText(missing);
+      button.addEventListener("click", () => {
+        group.querySelector("input:not(:checked):not(:disabled)")?.focus({ preventScroll: true });
+        group.scrollIntoView({ block: "center" });
+      });
+      item.append(button);
+      missingItems.push(item);
+    }
+  }
+  choiceSummaryList.replaceChildren(...missingItems);
+  choiceSummary.hidden = missingItems.length === 0;
+  return choiceSummary.hidden;
+}
+
 function addChoiceGroup(section, selections) {
   const limit = Number(section.dataset.choiceLimit);
   const title = section.querySelector("h3").textContent;
   const fieldset = document.createElement("fieldset");
   const legend = document.createElement("legend");
-  const countStatus = document.createElement("span");
+  const feedback = document.createElement("p");
   const savedItems = selections.get(title) ?? new Set();
 
   fieldset.dataset.title = title;
-  countStatus.setAttribute("aria-live", "polite");
-  legend.append(title + " · ", countStatus);
-  fieldset.append(legend);
+  fieldset.dataset.requiredCount = String(limit);
+  feedback.id = "choice-feedback-" + (choiceGroups.childElementCount + 1);
+  feedback.className = "choice-feedback";
+  feedback.setAttribute("aria-live", "polite");
+  fieldset.setAttribute("aria-describedby", feedback.id);
+  legend.textContent = title + " · escolha " + limit;
+  fieldset.append(legend, feedback);
 
   for (const item of section.querySelectorAll("li")) {
     const label = document.createElement("label");
@@ -78,7 +114,9 @@ function addChoiceGroup(section, selections) {
   function refreshChoices() {
     const picked = checkboxes.filter(checkbox => checkbox.checked);
     const count = picked.length;
-    countStatus.textContent = count ? count + " de " + limit : "até " + limit;
+    const missing = limit - count;
+    feedback.classList.toggle("complete", missing === 0);
+    feedback.textContent = missing ? missingChoiceText(missing) : "Escolhas completas (" + count + " de " + limit + ").";
     for (const checkbox of checkboxes) {
       checkbox.disabled = !checkbox.checked && count >= limit;
     }
@@ -89,12 +127,16 @@ function addChoiceGroup(section, selections) {
   fieldset.addEventListener("change", () => {
     const picked = refreshChoices();
     selections.set(title, new Set(picked.map(checkbox => checkbox.value)));
+    if (checkingChoices) updateChoiceSummary();
     result.hidden = true;
   });
   choiceGroups.append(fieldset);
 }
 
 function showChoices() {
+  checkingChoices = false;
+  choiceSummary.hidden = true;
+  choiceSummaryList.replaceChildren();
   choiceGroups.replaceChildren();
   choices.hidden = !selectedMenu.value;
   if (!selectedMenu.value) return;
@@ -168,6 +210,14 @@ form.addEventListener("submit", event => {
   if (!location) {
     form.elements.location.value = "";
     form.elements.location.reportValidity();
+    return;
+  }
+
+  checkingChoices = true;
+  if (!updateChoiceSummary()) {
+    result.hidden = true;
+    choiceSummaryTitle.focus({ preventScroll: true });
+    choiceSummary.scrollIntoView({ block: "center" });
     return;
   }
 

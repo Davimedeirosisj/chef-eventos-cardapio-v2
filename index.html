@@ -435,6 +435,32 @@
     .quote .choice-option:has(input:disabled) { color: var(--muted); cursor: default; }
     .quote .choice-option input { width: 20px; height: 20px; flex: 0 0 20px; margin: 0; accent-color: var(--copper); }
     .choice-intro { color: var(--muted); font-size: .9rem; }
+    .choice-feedback { margin: 2px 8px 5px; color: #72512b; font-size: .84rem; font-weight: 600; }
+    .choice-feedback.complete { color: #215d44; }
+    .quote fieldset.choice-error { border-color: #b07b42; background: #fff7eb; }
+    .choice-summary {
+      padding: 14px;
+      border: 1px solid #b98b56;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #fffaf0, #f4e5d1);
+      scroll-margin-top: 80px;
+    }
+    .choice-summary h3 { font-size: 1.6rem; }
+    .choice-summary ul { padding: 0; margin: 8px 0 0; list-style: none; }
+    .choice-summary button {
+      display: block;
+      width: 100%;
+      min-height: 44px;
+      padding: 5px 0;
+      border: 0;
+      background: transparent;
+      color: #67431e;
+      font-size: .9rem;
+      font-weight: 600;
+      text-align: start;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
     .footer { padding: 18px 15px 28px; color: var(--muted); text-align: center; font-size: .8125rem; }
     @media (max-width: 1170px) and (min-width: 601px) { .stage { width: calc(100% - 40px); } }
     @media (max-width: 600px) {
@@ -679,9 +705,13 @@
                 </output>
                 <label>Local <input name="location" placeholder="Bairro ou local do evento" required></label>
                 <div id="quote-choices" hidden>
-                  <p class="choice-intro">Se você já souber o que quer servir, inclua suas escolhas no pedido.</p>
+                  <p class="choice-intro">Complete as escolhas indicadas em cada categoria para preparar seu orçamento.</p>
                   <div id="choice-groups"></div>
                 </div>
+                <section class="choice-summary" id="choice-summary" aria-labelledby="choice-summary-title" hidden>
+                  <h3 id="choice-summary-title" tabindex="-1">Faltam escolhas no cardápio</h3>
+                  <ul id="choice-summary-list"></ul>
+                </section>
                 <button class="primary quote-submit" type="submit">Preparar mensagem</button>
                 <section class="quote-result" id="quote-result" aria-labelledby="quote-result-title" hidden>
                   <h3 id="quote-result-title" tabindex="-1">Mensagem pronta</h3>
