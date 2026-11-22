@@ -44,13 +44,23 @@
       overflow: hidden;
       border: 1px solid #342b22;
       border-radius: 25px 25px 12px 12px;
-      background: linear-gradient(113deg, #221c16 0%, #171513 60%, #13110f 100%);
+      background: radial-gradient(ellipse at 7% 19%, #805b365e 0%, transparent 48%), radial-gradient(ellipse at 51% 100%, #93602640 0%, transparent 48%), #171411;
       color: var(--cream);
     }
     .hero-copy {
       grid-area: copy;
+      min-width: 0;
       align-self: center;
-      padding: 42px clamp(26px, 5vw, 70px) 66px;
+      padding: 22px clamp(18px, 3vw, 38px) 54px;
+    }
+    .hero-glass {
+      padding: clamp(22px, 4vw, 47px) clamp(17px, 3.5vw, 42px);
+      border: 1px solid #e8ce9f60;
+      border-radius: 24px;
+      background: linear-gradient(145deg, #f6d8b631, #6e52322b 50%, #100c0977);
+      box-shadow: inset 0 1px 0 #fff0d555, 0 18px 42px #09070463;
+      -webkit-backdrop-filter: blur(18px) saturate(135%);
+      backdrop-filter: blur(18px) saturate(135%);
     }
     .hero-portrait {
       grid-area: portrait;
@@ -77,17 +87,19 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      min-height: 44px;
+      min-height: 48px;
       margin-top: 23px;
-      padding: 0 13px;
-      border: 1px solid #e3bd7970;
+      padding: 0 16px;
+      border: 1px solid #e9c68f8a;
       border-radius: 999px;
-      background: #ffffff08;
+      background: linear-gradient(145deg, #fff0d730, #d9ad7312 70%, #d9ad7306);
+      box-shadow: inset 0 1px 0 #fff4de4d, 0 6px 18px #0d0a0750;
       color: #f8e5c2;
       font-size: .85rem;
       font-weight: 600;
     }
-    .share-link:hover { background: #e3bd7924; border-color: var(--light-copper); }
+    .share-link:hover { background: #e3bd793d; border-color: var(--light-copper); }
+    .share-link:focus-visible { outline-color: #f5d693; }
     .share-link svg { width: 18px; height: 18px; flex: none; }
     .share-status { color: #f4e2c8; font-size: .8125rem; }
     .share-status:not(:empty) { margin-top: 8px; }
@@ -127,7 +139,7 @@
       min-height: 65px;
       border: 0;
       padding: 8px 2px;
-      background: none;
+      background: linear-gradient(180deg, #fffdfb91, #f1e5d22b);
       color: var(--muted);
       font-size: .94rem;
       font-weight: 600;
@@ -212,10 +224,36 @@
       text-align: center;
       text-decoration: none;
     }
-    .primary { border: 1px solid var(--espresso); background: var(--espresso); color: var(--cream); }
-    .primary:hover { background: #553321; }
-    .secondary { border: 1px solid #bd997e; background: transparent; color: var(--copper); }
-    .secondary:hover { background: #f4e7d9; }
+    .primary, .secondary, .share-link, .toggle {
+      transition: background-color .18s ease, box-shadow .18s ease, border-color .18s ease, transform .12s ease;
+    }
+    .primary, .secondary { min-height: 48px; gap: 8px; }
+    .primary:active, .secondary:active, .share-link:active { transform: translateY(1px); }
+    .primary {
+      border: 1px solid #634629;
+      background: linear-gradient(145deg, #694829, #3c291c 54%, #241910);
+      box-shadow: inset 0 1px 0 #f0c58867, 0 7px 15px #36251524;
+      color: var(--cream);
+    }
+    .primary:hover { background: linear-gradient(145deg, #795632, #442e20 54%, #241910); }
+    .secondary {
+      border: 1px solid #b59772;
+      background: linear-gradient(145deg, #fffdf9e8, #e8d5b58c);
+      box-shadow: inset 0 1px 0 #fff, 0 5px 12px #6e4d1f14;
+      color: #624318;
+    }
+    .secondary:hover { background: #f1e3cc; border-color: #926525; }
+    .toggle {
+      background: linear-gradient(145deg, #fffdfb, #eadbc1);
+      box-shadow: inset 0 1px 0 #fff, 0 3px 9px #6243181c;
+    }
+    .whatsapp-action {
+      border-color: #247151;
+      background: linear-gradient(145deg, #367d5f, #225d44 54%, #123e2d);
+      box-shadow: inset 0 1px 0 #b9efd870, 0 7px 15px #1b523023;
+    }
+    .whatsapp-action:hover { background: linear-gradient(145deg, #408268, #215d41 54%, #123e2d); }
+    .whatsapp-action svg { width: 18px; height: 18px; flex: none; }
     .contact-list { display: grid; gap: 14px; max-width: 650px; margin: 22px 0 0; }
     .contact-card {
       border: 1px solid var(--line);
@@ -241,27 +279,83 @@
     .contact-icon.instagram { color: #934153; background: #f6e8eb; }
     .contact-name { display: block; font-weight: 700; }
     .contact-meta { display: block; color: var(--muted); font-size: .875rem; }
-    .contact-cta { color: #176749; font-size: .875rem; font-weight: 700; }
+    .contact-cta {
+      padding: 5px 10px;
+      border: 1px solid #b0c8bb;
+      border-radius: 999px;
+      background: linear-gradient(145deg, #ffffff, #e1eee7);
+      color: #195a41;
+      font-size: .8125rem;
+      font-weight: 700;
+    }
     .contact-close, .contact-card[open] .contact-open { display: none; }
     .contact-card[open] .contact-close { display: inline; }
     .contact-content { padding: 16px 17px 18px; margin: 0 0 0; border-top: 1px solid var(--line); }
-    .quote { display: grid; gap: 14px; }
-    .quote label { display: grid; gap: 5px; font-weight: 600; font-size: .875rem; }
-    .quote input { width: 100%; min-height: 47px; padding: 8px 11px; border: 1px solid #cdb6a4; border-radius: 7px; background: #fffdfa; }
-    .quote-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
-    .quote-grid label, .quote-grid input { min-width: 0; }
-    .quote button { justify-self: start; }
-    .quote-result { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 9px; background: #f8efe5; }
-    .quote-result textarea { width: 100%; min-height: 145px; padding: 9px; border: 1px solid var(--line); border-radius: 6px; background: #fffdfa; resize: vertical; }
+    .quote { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .quote label { display: grid; min-width: 0; gap: 6px; font-weight: 600; font-size: .875rem; }
+    .quote :is(select, input:not([type="checkbox"])) {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      min-height: 48px;
+      padding: 8px 12px;
+      border: 1px solid #bda993;
+      border-radius: 10px;
+      background: linear-gradient(150deg, #fff, #faf4ea);
+      box-shadow: inset 0 1px 0 #fff, 0 3px 7px #3925120c;
+      color: var(--ink);
+      font: inherit;
+      font-size: 1rem;
+    }
+    .quote input[type="date"]::-webkit-date-and-time-value { min-width: 0; text-align: left; }
+    .quote-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+    .quote-submit { justify-self: start; }
+    .quote-result {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid #cdb897;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #fffcf7, #f3eadb);
+      box-shadow: inset 0 1px 0 #fff, 0 8px 20px #3925120c;
+      scroll-margin-top: 95px;
+    }
+    .quote-result h3 { font-size: 1.8rem; }
+    .quote-result .whatsapp-action { justify-self: start; }
+    .quote-message {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #fffdfa;
+      font-size: .9rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
     .notice { margin-top: 14px; font-size: .8125rem; color: var(--muted); }
     .about-photo { max-width: 350px; margin-top: 20px; border-radius: 14px; height: auto; }
     .contact-row[href] { color: inherit; text-decoration: none; }
     .contact-row[href]:hover { border-color: #b89a68; }
-    .quote select { font: inherit; min-height: 47px; width: 100%; padding: 8px 11px; background: #fffdfa; border: 1px solid #cdb6a4; border-radius: 7px; color: inherit; }
-    .quote fieldset { min-width: 0; padding: 10px 12px; margin: 12px 0 0; border: 1px solid var(--line); border-radius: 9px; }
+    .quote fieldset { min-width: 0; padding: 8px 10px 10px; margin: 13px 0 0; border: 1px solid var(--line); border-radius: 12px; }
     .quote legend { font-weight: 700; padding: 0 5px; }
-    .quote .choice-option { display: flex; gap: 8px; align-items: center; min-height: 35px; }
-    .quote .choice-option input { width: 18px; min-height: 18px; accent-color: var(--copper); }
+    .quote .choice-option {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-height: 44px;
+      padding: 6px 8px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .quote .choice-option + .choice-option { margin-top: 3px; }
+    .quote .choice-option:has(input:checked) {
+      border-color: #decaab;
+      background: linear-gradient(145deg, #f8eedf, #eee0c8);
+    }
+    .quote .choice-option:has(input:disabled) { color: var(--muted); cursor: default; }
+    .quote .choice-option input { width: 20px; height: 20px; flex: 0 0 20px; margin: 0; accent-color: var(--copper); }
     .choice-intro { color: var(--muted); font-size: .9rem; }
     .footer { padding: 18px 15px 28px; color: var(--muted); text-align: center; font-size: .8125rem; }
     @media (max-width: 1170px) and (min-width: 601px) { .stage { width: calc(100% - 40px); } }
@@ -270,7 +364,8 @@
       .hero { grid-template-areas: "portrait" "copy"; grid-template-columns: minmax(0, 1fr); min-height: 0; border: 0; border-radius: 0; text-align: center; }
       .hero-portrait { height: clamp(255px, 68vw, 350px); }
       .hero-portrait img { width: min(100%, 470px); margin-inline: auto; }
-      .hero-copy { padding: 26px 20px 42px; }
+      .hero-copy { padding: 12px 12px 32px; }
+      .hero-glass { padding: 21px 13px 23px; border-radius: 19px; }
       .hero h1 { font-size: clamp(2.65rem, 10vw, 4rem); }
       .hero .slogan { margin-top: 7px; }
       .share-link { margin-top: 16px; }
@@ -283,6 +378,12 @@
       .menu-item summary strong { font-size: clamp(1.38rem, 5vw, 1.8rem); }
       .toggle { width: 28px; }
       .menu-sections { grid-template-columns: 1fr; gap: 15px; }
+    }
+    @media (max-width: 520px) {
+      .quote-grid { grid-template-columns: minmax(0, 1fr); }
+      .quote-submit, .quote-result .whatsapp-action { justify-self: stretch; }
+      .contact-content { padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
+      .menu-detail .secondary { width: 100%; }
     }
     @media (max-width: 350px) {
       .tabs a { gap: 4px; font-size: .875rem; }
@@ -305,15 +406,17 @@
         <img src="assets/chefe-valdo-retrato.jpg" alt="Chefe Valdo vestindo seu uniforme de chef" width="640" height="1137" fetchpriority="high">
       </div>
       <div class="hero-copy">
-        <h1>Chefe Valdo</h1>
-        <p class="slogan">Gastronomia com propósito</p>
-        <p class="hero-location">Buffet para eventos em Fortaleza, CE</p>
-        <button class="share-link" id="share-site" type="button" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/></svg>
-          Compartilhar
-        </button>
-        <p class="share-status" id="share-status" role="status"></p>
-        <input class="share-url" id="share-url" type="url" aria-label="Link do Chefe Valdo" readonly hidden>
+        <div class="hero-glass">
+          <h1>Chefe Valdo</h1>
+          <p class="slogan">Gastronomia com propósito</p>
+          <p class="hero-location">Buffet para eventos em Fortaleza, CE</p>
+          <button class="share-link" id="share-site" type="button" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/></svg>
+            Compartilhar
+          </button>
+          <p class="share-status" id="share-status" role="status"></p>
+          <input class="share-url" id="share-url" type="url" aria-label="Link do Chefe Valdo" readonly hidden>
+        </div>
       </div>
     </header>
 
@@ -474,11 +577,15 @@
                   <p class="choice-intro">Se você já souber o que quer servir, inclua suas escolhas no pedido.</p>
                   <div id="choice-groups"></div>
                 </div>
-                <button class="primary" type="submit">Preparar mensagem</button>
-                <div class="quote-result" id="quote-result" hidden>
-                  <label>Mensagem pronta <textarea id="quote-message" readonly></textarea></label>
-                  <a class="secondary" id="whatsapp" target="_blank" rel="noopener noreferrer">Abrir no WhatsApp</a>
-                </div>
+                <button class="primary quote-submit" type="submit">Preparar mensagem</button>
+                <section class="quote-result" id="quote-result" aria-labelledby="quote-result-title" hidden>
+                  <h3 id="quote-result-title" tabindex="-1">Mensagem pronta</h3>
+                  <a class="primary whatsapp-action" id="whatsapp" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.7 11.8a8.7 8.7 0 0 1-8.8 8.7 8.8 8.8 0 0 1-4.2-1.1l-4.3 1.2 1.2-4.1a8.7 8.7 0 1 1 16.1-4.7Z"/><path d="M8.6 8.1a5.9 5.9 0 0 0 6.9 6.9"/></svg>
+                    Abrir no WhatsApp
+                  </a>
+                  <p class="quote-message" id="quote-message"></p>
+                </section>
               </form>
             </div>
           </details>

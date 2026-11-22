@@ -3,6 +3,7 @@ const selectedMenu = document.getElementById("selected-menu");
 const choices = document.getElementById("quote-choices");
 const choiceGroups = document.getElementById("choice-groups");
 const result = document.getElementById("quote-result");
+const resultTitle = document.getElementById("quote-result-title");
 const messageField = document.getElementById("quote-message");
 const whatsappLink = document.getElementById("whatsapp");
 
@@ -11,9 +12,12 @@ function addChoiceGroup(section) {
   const title = section.querySelector("h3").textContent;
   const fieldset = document.createElement("fieldset");
   const legend = document.createElement("legend");
+  const countStatus = document.createElement("span");
 
   fieldset.dataset.title = title;
-  legend.textContent = title + " · até " + limit;
+  countStatus.setAttribute("aria-live", "polite");
+  legend.append(title + " · ", countStatus);
+  countStatus.textContent = "até " + limit;
   fieldset.append(legend);
 
   for (const item of section.querySelectorAll("li")) {
@@ -30,6 +34,7 @@ function addChoiceGroup(section) {
   const checkboxes = [...fieldset.querySelectorAll("input")];
   fieldset.addEventListener("change", () => {
     const count = checkboxes.filter(checkbox => checkbox.checked).length;
+    countStatus.textContent = count ? count + " de " + limit : "até " + limit;
     for (const checkbox of checkboxes) {
       checkbox.disabled = !checkbox.checked && count >= limit;
     }
@@ -92,10 +97,12 @@ form.addEventListener("submit", event => {
       message.push(fieldset.dataset.title + ": " + checked.map(checkbox => checkbox.value).join(", "));
     }
   }
-  messageField.value = message.join("\n");
-  whatsappLink.href = "https://wa.me/5585989765643?text=" + encodeURIComponent(messageField.value);
+  const messageText = message.join("\n");
+  messageField.textContent = messageText;
+  whatsappLink.href = "https://wa.me/5585989765643?text=" + encodeURIComponent(messageText);
   result.hidden = false;
-  messageField.focus();
+  resultTitle.focus({ preventScroll: true });
+  result.scrollIntoView({ block: "start" });
 });
 
 const shareButton = document.getElementById("share-site");
