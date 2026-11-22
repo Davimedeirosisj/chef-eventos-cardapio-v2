@@ -92,25 +92,38 @@
     }
     .hero h1 { font-size: clamp(3rem, 6.5vw, 5.85rem); letter-spacing: -.035em; text-wrap: balance; }
     .hero .slogan { margin-top: 10px; color: var(--light-copper); font: italic 400 clamp(1.65rem, 3vw, 2.35rem)/1.05 var(--serif); }
-    .hero .hero-location { margin-top: 9px; color: #e9dccc; font-size: .9rem; }
-    .share-link {
-      display: inline-flex;
+    .hero-actions {
+      display: flex;
       align-items: center;
-      gap: 8px;
-      min-height: 48px;
-      margin-top: 23px;
-      padding: 0 16px;
-      border: 1px solid #e9c68f8a;
-      border-radius: 999px;
-      background: linear-gradient(145deg, #fff0d730, #d9ad7312 70%, #d9ad7306);
-      box-shadow: inset 0 1px 0 #fff4de4d, 0 6px 18px #0d0a0750;
-      color: #f8e5c2;
-      font-size: .85rem;
-      font-weight: 600;
+      gap: 5px;
+      margin-top: 7px;
     }
-    .share-link:hover { background: #e3bd793d; border-color: var(--light-copper); }
+    .hero .hero-location { min-width: 0; color: #e9dccc; font-size: .9rem; }
+    .share-link {
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #f8e5c2;
+    }
+    .share-glyph {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      border: 1px solid #e9c68f72;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #fff0d730, #d9ad7309);
+      box-shadow: inset 0 1px 0 #fff4de38, 0 3px 8px #0d0a073b;
+    }
+    .share-link:hover .share-glyph { background: #e3bd793d; border-color: var(--light-copper); }
     .share-link:focus-visible { outline-color: #f5d693; }
-    .share-link svg { width: 18px; height: 18px; flex: none; }
+    .share-link svg { width: 17px; height: 17px; }
     .share-status { color: #f4e2c8; font-size: .8125rem; }
     .share-status:not(:empty) { margin-top: 8px; }
     .share-url {
@@ -387,14 +400,14 @@
       .hero-portrait img { width: min(100%, 470px); height: auto; max-height: none; margin-inline: auto; }
       .hero-copy { position: relative; z-index: 1; padding: 12px 12px 32px; }
       .hero-glass {
-        padding: 21px 13px 23px;
+        padding: 18px 13px 15px;
         border-radius: 19px;
         background: linear-gradient(145deg, #20160f9e, #130e0ac2 55%, #110c08b0);
       }
       .hero-glass :is(h1, .slogan, .hero-location) { text-shadow: 0 2px 12px #080604b3; }
       .hero h1 { font-size: clamp(2.65rem, 10vw, 4rem); }
       .hero .slogan { margin-top: 7px; color: #f4d59c; }
-      .share-link { margin-top: 16px; }
+      .hero-actions { justify-content: center; margin-top: 4px; }
       .share-url { margin-inline: auto; }
       .catalog { width: 100%; margin-top: -20px; border-inline: 0; border-radius: 20px 20px 0 0; }
       .tabs a { min-height: 57px; }
@@ -435,11 +448,12 @@
         <div class="hero-glass">
           <h1>Chefe Valdo</h1>
           <p class="slogan">Gastronomia com propósito</p>
-          <p class="hero-location">Buffet para eventos em Fortaleza, CE</p>
-          <button class="share-link" id="share-site" type="button" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/></svg>
-            Compartilhar
-          </button>
+          <div class="hero-actions">
+            <p class="hero-location">Buffet para eventos em Fortaleza, CE</p>
+            <button class="share-link" id="share-site" type="button" aria-label="Compartilhar o site do Chefe Valdo" title="Compartilhar" hidden>
+              <span class="share-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/></svg></span>
+            </button>
+          </div>
           <p class="share-status" id="share-status" role="status"></p>
           <input class="share-url" id="share-url" type="url" aria-label="Link do Chefe Valdo" readonly hidden>
         </div>
