@@ -7,6 +7,9 @@ const choiceGroups = document.getElementById("choice-groups");
 const choiceSummary = document.getElementById("choice-summary");
 const choiceSummaryTitle = document.getElementById("choice-summary-title");
 const choiceSummaryList = document.getElementById("choice-summary-list");
+const choiceNotice = document.getElementById("quote-choice-notice");
+const quoteSubmit = document.getElementById("quote-submit");
+const dateError = document.getElementById("quote-date-error");
 const estimate = document.getElementById("quote-estimate");
 const estimateBreakdown = document.getElementById("quote-estimate-breakdown");
 const estimateTotal = document.getElementById("quote-estimate-total");
@@ -27,6 +30,22 @@ function updateMinimumDate() {
   const date = ["year", "month", "day"].map(type => parts.find(part => part.type === type).value).join("-");
   eventDate.min = date;
   return date;
+}
+
+function showDateError(message) {
+  eventDate.setCustomValidity(message);
+  eventDate.setAttribute("aria-invalid", message ? "true" : "false");
+  if (dateError.textContent !== message) dateError.textContent = message;
+  dateError.hidden = !message;
+}
+
+function rejectPastDate(clear = false) {
+  const minDate = updateMinimumDate();
+  if (!eventDate.value || eventDate.value >= minDate) return false;
+
+  if (clear) eventDate.value = "";
+  showDateError("A data escolhida já passou. Selecione hoje ou uma data futura.");
+  return true;
 }
 
 function currentEstimate() {
@@ -59,9 +78,11 @@ function missingChoiceText(count) {
 
 function updateChoiceSummary() {
   const missingItems = [];
+  let totalMissing = 0;
 
   for (const group of choiceGroups.querySelectorAll("fieldset")) {
-    const missing = Number(group.dataset.requiredCount) - group.querySelectorAll("input:checked").length;
+    const missing = Math.max(0, Number(group.dataset.requiredCount) - group.querySelectorAll("input:checked").length);
+    totalMissing += missing;
     group.classList.toggle("choice-error", checkingChoices && missing > 0);
     if (checkingChoices && missing > 0) {
       const item = document.createElement("li");
@@ -78,7 +99,13 @@ function updateChoiceSummary() {
   }
   choiceSummaryList.replaceChildren(...missingItems);
   choiceSummary.hidden = missingItems.length === 0;
-  return choiceSummary.hidden;
+  const notice = totalMissing === 1 ? "Falta 1 opção para continuar." :
+    totalMissing > 1 ? "Faltam " + totalMissing + " opções para continuar." : "";
+  if (choiceNotice.textContent !== notice) choiceNotice.textContent = notice;
+  choiceNotice.hidden = !notice;
+  const buttonText = totalMissing ? "Ver o que falta" : "Preparar mensagem";
+  if (quoteSubmit.textContent !== buttonText) quoteSubmit.textContent = buttonText;
+  return totalMissing === 0;
 }
 
 function addChoiceGroup(section, selections) {
@@ -127,7 +154,7 @@ function addChoiceGroup(section, selections) {
   fieldset.addEventListener("change", () => {
     const picked = refreshChoices();
     selections.set(title, new Set(picked.map(checkbox => checkbox.value)));
-    if (checkingChoices) updateChoiceSummary();
+    updateChoiceSummary();
     result.hidden = true;
   });
   choiceGroups.append(fieldset);
@@ -139,16 +166,17 @@ function showChoices() {
   choiceSummaryList.replaceChildren();
   choiceGroups.replaceChildren();
   choices.hidden = !selectedMenu.value;
-  if (!selectedMenu.value) return;
+  if (selectedMenu.value) {
+    const menu = document.getElementById(selectedMenu.value);
+    if (!menuSelections.has(menu.id)) menuSelections.set(menu.id, new Map());
+    const selections = menuSelections.get(menu.id);
 
-  const menu = document.getElementById(selectedMenu.value);
-  if (!menuSelections.has(menu.id)) menuSelections.set(menu.id, new Map());
-  const selections = menuSelections.get(menu.id);
-
-  for (const section of menu.querySelectorAll("[data-choice-limit]")) {
-    addChoiceGroup(section, selections);
+    for (const section of menu.querySelectorAll("[data-choice-limit]")) {
+      addChoiceGroup(section, selections);
+    }
+    addChoiceGroup(document.getElementById("juice-choices"), selections);
   }
-  addChoiceGroup(document.getElementById("juice-choices"), selections);
+  updateChoiceSummary();
 }
 
 for (const link of document.querySelectorAll("[data-open-quote]")) {
@@ -168,9 +196,9 @@ for (const link of document.querySelectorAll("[data-menu]")) {
 }
 
 form.hidden = false;
-updateMinimumDate();
+rejectPastDate(true);
 window.addEventListener("pageshow", () => {
-  updateMinimumDate();
+  rejectPastDate(true);
   showChoices();
   showEstimate();
 });
@@ -184,20 +212,27 @@ guestCount.addEventListener("input", () => {
   showEstimate();
 });
 eventDate.addEventListener("input", () => {
-  eventDate.setCustomValidity("");
-  updateMinimumDate();
+  if (!rejectPastDate()) showDateError("");
+});
+eventDate.addEventListener("change", () => {
+  if (!rejectPastDate(true) && eventDate.value) showDateError("");
+  result.hidden = true;
 });
 form.addEventListener("input", () => { result.hidden = true; });
 
 form.addEventListener("submit", event => {
   event.preventDefault();
 
-  const minDate = updateMinimumDate();
-  if (eventDate.value < minDate) {
-    eventDate.setCustomValidity("Escolha a data de hoje ou uma data futura.");
-    eventDate.reportValidity();
+  result.hidden = true;
+  rejectPastDate(true);
+  checkingChoices = Boolean(selectedMenu.value);
+  if (!updateChoiceSummary()) {
+    choiceSummaryTitle.focus({ preventScroll: true });
+    choiceSummary.scrollIntoView({ block: "center" });
     return;
   }
+
+  if (!form.reportValidity()) return;
 
   const amount = currentEstimate();
   if (!amount) {
@@ -210,14 +245,6 @@ form.addEventListener("submit", event => {
   if (!location) {
     form.elements.location.value = "";
     form.elements.location.reportValidity();
-    return;
-  }
-
-  checkingChoices = true;
-  if (!updateChoiceSummary()) {
-    result.hidden = true;
-    choiceSummaryTitle.focus({ preventScroll: true });
-    choiceSummary.scrollIntoView({ block: "center" });
     return;
   }
 

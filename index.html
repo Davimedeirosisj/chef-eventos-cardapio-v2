@@ -359,6 +359,17 @@
     }
     .quote input[type="date"]::-webkit-date-and-time-value { min-width: 0; text-align: left; }
     .quote-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+    .quote-date-field { min-width: 0; }
+    .quote-date-error { margin-top: 5px; color: #8b3222; font-size: .84rem; font-weight: 600; }
+    .quote input[aria-invalid="true"] { border-color: #a54f37; }
+    .quote-choice-notice {
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f5e6cc;
+      color: #664214;
+      font-size: .9rem;
+      font-weight: 700;
+    }
     .quote-submit { justify-self: start; }
     .quote-result {
       display: grid;
@@ -683,7 +694,7 @@
             </summary>
             <div class="contact-content">
               <noscript><a class="primary" href="https://wa.me/5585989765643">Pedir orçamento no WhatsApp</a></noscript>
-              <form class="quote" id="quote" hidden>
+              <form class="quote" id="quote" novalidate hidden>
                 <label>Cardápio
                   <select name="menu" id="selected-menu" required>
                     <option value="">Selecione um cardápio</option>
@@ -695,7 +706,10 @@
                   </select>
                 </label>
                 <div class="quote-grid">
-                  <label>Data do evento <input type="date" name="date" required></label>
+                  <div class="quote-date-field">
+                    <label>Data do evento <input type="date" name="date" aria-describedby="quote-date-error" required></label>
+                    <p class="quote-date-error" id="quote-date-error" role="status" hidden></p>
+                  </div>
                   <label>Convidados <input type="number" id="guest-count" name="guests" min="1" step="1" inputmode="numeric" placeholder="Ex.: 30" required></label>
                 </div>
                 <output class="quote-estimate" id="quote-estimate" for="selected-menu guest-count" aria-live="polite" hidden>
@@ -712,7 +726,8 @@
                   <h3 id="choice-summary-title" tabindex="-1">Faltam escolhas no cardápio</h3>
                   <ul id="choice-summary-list"></ul>
                 </section>
-                <button class="primary quote-submit" type="submit">Preparar mensagem</button>
+                <p class="quote-choice-notice" id="quote-choice-notice" role="status" hidden></p>
+                <button class="primary quote-submit" id="quote-submit" type="submit" aria-describedby="quote-choice-notice">Preparar mensagem</button>
                 <section class="quote-result" id="quote-result" aria-labelledby="quote-result-title" hidden>
                   <h3 id="quote-result-title" tabindex="-1">Mensagem pronta</h3>
                   <a class="primary whatsapp-action" id="whatsapp" target="_blank" rel="noopener noreferrer">
