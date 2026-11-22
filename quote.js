@@ -97,3 +97,39 @@ form.addEventListener("submit", event => {
   result.hidden = false;
   messageField.focus();
 });
+
+const shareButton = document.getElementById("share-site");
+const shareStatus = document.getElementById("share-status");
+const shareUrl = document.getElementById("share-url");
+const siteUrl = document.querySelector('link[rel="canonical"]').href;
+
+shareButton.hidden = false;
+shareButton.addEventListener("click", async () => {
+  shareStatus.textContent = "";
+  shareUrl.hidden = true;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "Chefe Valdo", url: siteUrl });
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") return;
+    }
+  }
+
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(siteUrl);
+      shareStatus.textContent = "Link copiado.";
+      return;
+    } catch {
+      // The selectable URL also works without clipboard permission.
+    }
+  }
+
+  shareUrl.value = siteUrl;
+  shareUrl.hidden = false;
+  shareUrl.focus();
+  shareUrl.select();
+  shareStatus.textContent = "Copie o link abaixo para compartilhar.";
+});
