@@ -54,13 +54,23 @@
       padding: 22px clamp(18px, 3vw, 38px) 54px;
     }
     .hero-glass {
+      position: relative;
       padding: clamp(22px, 4vw, 47px) clamp(17px, 3.5vw, 42px);
-      border: 1px solid #e8ce9f60;
+      border: 1px solid #efdbb584;
       border-radius: 24px;
-      background: linear-gradient(145deg, #f6d8b631, #6e52322b 50%, #100c0977);
-      box-shadow: inset 0 1px 0 #fff0d555, 0 18px 42px #09070463;
-      -webkit-backdrop-filter: blur(18px) saturate(135%);
-      backdrop-filter: blur(18px) saturate(135%);
+      background: linear-gradient(138deg, #d9bf941c, #160e0880 56%, #100b08a1);
+      box-shadow: inset 0 1px 0 #fff6e387, inset 0 -1px 0 #f7dfb02b, 0 18px 42px #09070456;
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+      backdrop-filter: blur(12px) saturate(140%);
+    }
+    .hero-glass::before {
+      position: absolute;
+      top: 0;
+      inset-inline: 12%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #fff6ddd9 46%, transparent);
+      content: "";
+      pointer-events: none;
     }
     .hero-portrait {
       grid-area: portrait;
@@ -361,13 +371,29 @@
     @media (max-width: 1170px) and (min-width: 601px) { .stage { width: calc(100% - 40px); } }
     @media (max-width: 600px) {
       .stage { margin-top: 0; }
-      .hero { grid-template-areas: "portrait" "copy"; grid-template-columns: minmax(0, 1fr); min-height: 0; border: 0; border-radius: 0; text-align: center; }
-      .hero-portrait { height: clamp(255px, 68vw, 350px); }
-      .hero-portrait img { width: min(100%, 470px); margin-inline: auto; }
-      .hero-copy { padding: 12px 12px 32px; }
-      .hero-glass { padding: 21px 13px 23px; border-radius: 19px; }
+      .hero {
+        position: relative;
+        isolation: isolate;
+        grid-template-areas: "portrait" "copy";
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: clamp(255px, 68vw, 350px) auto;
+        min-height: 0;
+        border: 0;
+        border-radius: 0;
+        background: #090909;
+        text-align: center;
+      }
+      .hero-portrait { grid-area: 1 / 1 / -1 / -1; position: absolute; inset: 0; z-index: 0; }
+      .hero-portrait img { width: min(100%, 470px); height: auto; max-height: none; margin-inline: auto; }
+      .hero-copy { position: relative; z-index: 1; padding: 12px 12px 32px; }
+      .hero-glass {
+        padding: 21px 13px 23px;
+        border-radius: 19px;
+        background: linear-gradient(145deg, #20160f9e, #130e0ac2 55%, #110c08b0);
+      }
+      .hero-glass :is(h1, .slogan, .hero-location) { text-shadow: 0 2px 12px #080604b3; }
       .hero h1 { font-size: clamp(2.65rem, 10vw, 4rem); }
-      .hero .slogan { margin-top: 7px; }
+      .hero .slogan { margin-top: 7px; color: #f4d59c; }
       .share-link { margin-top: 16px; }
       .share-url { margin-inline: auto; }
       .catalog { width: 100%; margin-top: -20px; border-inline: 0; border-radius: 20px 20px 0 0; }
