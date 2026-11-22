@@ -371,6 +371,16 @@
       font-weight: 700;
     }
     .quote-submit { justify-self: start; }
+    .date-inquiry {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: .9rem;
+      color: var(--copper);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
     .quote-result {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -724,11 +734,12 @@
                   <div id="choice-groups"></div>
                 </div>
                 <section class="choice-summary" id="choice-summary" aria-labelledby="choice-summary-title" hidden>
-                  <h3 id="choice-summary-title" tabindex="-1">Faltam escolhas no cardápio</h3>
+                  <h3 id="choice-summary-title" tabindex="-1">O que falta para continuar</h3>
                   <ul id="choice-summary-list"></ul>
                 </section>
                 <p class="quote-choice-notice" id="quote-choice-notice" role="status" hidden></p>
                 <button class="primary quote-submit" id="quote-submit" type="submit" aria-describedby="quote-choice-notice">Preparar mensagem</button>
+                <a class="date-inquiry" id="date-inquiry" href="https://wa.me/5585989765643?text=Ol%C3%A1%2C%20Chefe%20Valdo%21%20Gostaria%20de%20consultar%20uma%20data%20para%20meu%20evento." target="_blank" rel="noopener noreferrer">Ainda estou decidindo. Consultar uma data pelo WhatsApp</a>
                 <section class="quote-result" id="quote-result" aria-labelledby="quote-result-title" hidden>
                   <h3 id="quote-result-title" tabindex="-1">Mensagem pronta</h3>
                   <a class="primary whatsapp-action" id="whatsapp" target="_blank" rel="noopener noreferrer">

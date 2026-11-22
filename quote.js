@@ -19,7 +19,7 @@ const messageField = document.getElementById("quote-message");
 const whatsappLink = document.getElementById("whatsapp");
 const quoteCard = document.getElementById("whatsapp-card");
 const menuSelections = new Map();
-let checkingChoices = false;
+let attemptedSubmit = false;
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 const fortalezaCalendar = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Fortaleza", year: "numeric", month: "2-digit", day: "2-digit"
@@ -76,25 +76,41 @@ function missingChoiceText(count) {
   return count === 1 ? "Selecione mais 1 opção." : "Selecione mais " + count + " opções.";
 }
 
+function addIssue(items, message, target, focusTarget = target) {
+  const item = document.createElement("li");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = message;
+  button.addEventListener("click", () => {
+    focusTarget.focus({ preventScroll: true });
+    target.scrollIntoView({ block: "center" });
+  });
+  item.append(button);
+  items.push(item);
+}
+
 function updateChoiceSummary() {
   const missingItems = [];
+  if (attemptedSubmit) {
+    if (!selectedMenu.value) addIssue(missingItems, "Selecione um cardápio.", selectedMenu);
+    if (!eventDate.value || !eventDate.validity.valid) {
+      addIssue(missingItems, dateError.textContent || "Informe a data do evento.", eventDate);
+    }
+    if (!guestCount.validity.valid || (selectedMenu.value && !currentEstimate())) {
+      addIssue(missingItems, "Informe a quantidade de convidados em número inteiro, a partir de 1.", guestCount);
+    }
+    const location = form.elements.location;
+    if (!location.value.trim()) addIssue(missingItems, "Informe o bairro ou local do evento.", location);
+  }
   let totalMissing = 0;
 
   for (const group of choiceGroups.querySelectorAll("fieldset")) {
     const missing = Math.max(0, Number(group.dataset.requiredCount) - group.querySelectorAll("input:checked").length);
     totalMissing += missing;
-    group.classList.toggle("choice-error", checkingChoices && missing > 0);
-    if (checkingChoices && missing > 0) {
-      const item = document.createElement("li");
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = group.dataset.title + ": " + missingChoiceText(missing);
-      button.addEventListener("click", () => {
-        group.querySelector("input:not(:checked):not(:disabled)")?.focus({ preventScroll: true });
-        group.scrollIntoView({ block: "center" });
-      });
-      item.append(button);
-      missingItems.push(item);
+    group.classList.toggle("choice-error", attemptedSubmit && missing > 0);
+    if (attemptedSubmit && missing > 0) {
+      addIssue(missingItems, group.dataset.title + ": " + missingChoiceText(missing), group,
+        group.querySelector("input:not(:checked):not(:disabled)"));
     }
   }
   choiceSummaryList.replaceChildren(...missingItems);
@@ -102,10 +118,10 @@ function updateChoiceSummary() {
   const notice = totalMissing === 1 ? "Falta 1 opção para continuar." :
     totalMissing > 1 ? "Faltam " + totalMissing + " opções para continuar." : "";
   if (choiceNotice.textContent !== notice) choiceNotice.textContent = notice;
-  choiceNotice.hidden = !notice;
-  const buttonText = totalMissing ? "Ver o que falta" : "Preparar mensagem";
+  choiceNotice.hidden = !notice || !choiceSummary.hidden;
+  const buttonText = totalMissing || missingItems.length ? "Ver o que falta" : "Preparar mensagem";
   if (quoteSubmit.textContent !== buttonText) quoteSubmit.textContent = buttonText;
-  return totalMissing === 0;
+  return totalMissing === 0 && missingItems.length === 0;
 }
 
 function addChoiceGroup(section, selections) {
@@ -143,7 +159,7 @@ function addChoiceGroup(section, selections) {
     const count = picked.length;
     const missing = limit - count;
     feedback.classList.toggle("complete", missing === 0);
-    feedback.textContent = missing ? missingChoiceText(missing) : "Escolhas completas (" + count + " de " + limit + ").";
+    feedback.textContent = missing ? missingChoiceText(missing) : "Escolhas completas (" + count + " de " + limit + "). Para trocar, desmarque uma opção.";
     for (const checkbox of checkboxes) {
       checkbox.disabled = !checkbox.checked && count >= limit;
     }
@@ -161,7 +177,6 @@ function addChoiceGroup(section, selections) {
 }
 
 function showChoices() {
-  checkingChoices = false;
   choiceSummary.hidden = true;
   choiceSummaryList.replaceChildren();
   choiceGroups.replaceChildren();
@@ -216,16 +231,29 @@ eventDate.addEventListener("input", () => {
 });
 eventDate.addEventListener("change", () => {
   if (!rejectPastDate(true) && eventDate.value) showDateError("");
+  if (attemptedSubmit) updateChoiceSummary();
   result.hidden = true;
 });
-form.addEventListener("input", () => { result.hidden = true; });
+form.addEventListener("input", event => {
+  result.hidden = true;
+  if (attemptedSubmit && event.target.type !== "checkbox" && event.target !== selectedMenu) updateChoiceSummary();
+});
+
+const dateInquiry = document.getElementById("date-inquiry");
+dateInquiry.addEventListener("click", () => {
+  const date = eventDate.value;
+  const message = date && date >= updateMinimumDate() && eventDate.validity.valid
+    ? "Olá, Chefe Valdo! Gostaria de consultar a disponibilidade para " + date.split("-").reverse().join("/") + "."
+    : "Olá, Chefe Valdo! Gostaria de consultar uma data para meu evento.";
+  dateInquiry.href = "https://wa.me/5585989765643?text=" + encodeURIComponent(message);
+});
 
 form.addEventListener("submit", event => {
   event.preventDefault();
 
   result.hidden = true;
   rejectPastDate(true);
-  checkingChoices = Boolean(selectedMenu.value);
+  attemptedSubmit = true;
   if (!updateChoiceSummary()) {
     choiceSummaryTitle.focus({ preventScroll: true });
     choiceSummary.scrollIntoView({ block: "center" });
